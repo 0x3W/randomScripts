@@ -1,0 +1,7 @@
+pandas
+websocket
+time
+json
+datetime
+time
+ssl
