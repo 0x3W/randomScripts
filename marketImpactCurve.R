@@ -122,3 +122,23 @@ for (i2 in 3:dim(d2)[1]){
     quote_i1 = i2
   }
 }
+
+# Look only at buyer initiated trades
+buy = d2[!is.na(d2[,4]) & d2[,1]==1,]
+buy = buy[,c(2,4)]
+buy[,1] = buy[,1]/mean(buy[,1])
+require(Hmisc)
+max_bins = 50
+sizes = as.double(levels(cut2(buy[,1],g=max_bins,levels.mean=TRUE)))
+buy[,1] = cut2(buy[,1],g=max_bins,levels.mean=TRUE)
+ge_imp = aggregate(buy[,2], list(buy[,1]), mean)
+plot(sizes,ge_imp[,2],log="xy",type="p",pch=15,ylab="price shift",
+     xlab="normalized volume",main="GE")
+
+# Find how the price impact increases with volume
+imp_fit = function(pow){summary(lm(ge_imp[,2] ~ I(sizes^pow)))$r.squared}
+fits = sapply(seq(0,1,.01), imp_fit)
+print(paste("R^2 minimizing beta in volume^beta=impact: ",which.max(fits)/100))
+print("Difference is likely because of Lee-Ready flat trade/quote ambiguity")
+print("and timestamp aggregation ambiguity.")
+print("A huge number of trades were labeled as having 0 impact.")
