@@ -37,3 +37,88 @@ for (i in 2:dim(agg)[1]) {
 ge.t1 <- xts(agg[,c(1,2)],order.by=index(ge.t))
 ge.t = xts(agg[,c(1,2)],order.by=index(ge.t))
 ge.t = ge.t[ge.t$size!=-1]
+
+
+# Load GE Quote Data
+#ge.q = rbind(csv_mypath("ge_quote_1995_JanJun.csv"),
+#             csv_mypath("ge_quote_1995_JulDec.csv"))
+ge.q = csv_mypath("quotes-Feb1.csv")
+ge.q <- q1AAPL
+#ge.q = ge.q[-1]
+ge.q$TIME = mapply(paste, as(ge.q$DATE,"character"), ge.q$TIME_M)
+ge.q$TIME = as.POSIXct(ge.q$TIME,tz="EST",format="%Y%m%d %H:%M:%S")
+ge.q = xts(ge.q[c(4,6)],order.by=ge.q$TIME)
+colnames(ge.q) = c("bid","ofr")
+
+# Clean GE Quote Data
+ge.q = ge.q[!(ge.q$bid==0 | ge.q$ofr==0),] # Bid/Offer of 0 is a data error
+ge = merge(ge.t, ge.q)
+# Final Result: variable "ge" is an xts with NA"s showing trades / quotes
+#ge.t = NULL
+#ge.q = NULL
+
+# Classify the direction of trades according to Lee-Ready (1991)
+ge$mid = (ge$bid+ge$ofr)/2
+ge$dir = matrix(NA,dim(ge)[1],1)
+d = coredata(ge) # data.frame(coredata(ge)) is insanely slower
+p1 = d[1,1]
+d[1,6] = 1 # Assume the first trade was up
+dir1 = d[1,6]
+q1 = d[2,5]
+for (i in 3:dim(d)[1]){
+  p2 = d[i,1] # current price
+  if (!is.na(p2)){ # Trade
+    # Quote Rule
+    if (p2 > q1){
+      d[i,6] = 1 # Direction
+    }
+    else if (p2 < q1) {
+      d[i,6] = -1
+    }
+  #}
+    else # p == midpoint
+    {
+      # Tick Rule
+      if (p2 > p1) {
+        d[i,6] = 1
+      }
+      if (p2 < p1) {
+        d[i,6] = -1
+      }
+      else{
+        d[i,6] = dir1
+      }
+    }
+  p1 = p2
+  dir1 = d[i,6]
+  }
+  else # Quote
+  {
+    q1 = d[i,5] # Update most recent midpoint
+  }
+}
+
+# Measure impact per trade
+d2 = cbind(d[,6],d[,2],log(d[,5]),matrix(NA,dim(d)[1],1))
+colnames(d2) = c("dir","size","logmid","impact")
+trade_i1 = 1
+quote_i1 = 2
+for (i2 in 3:dim(d2)[1]){
+  dir_i2 = d2[i2,1]
+  if (!is.na(dir_i2)) # Trade
+  {
+    if (i2-trade_i1 == 1) # Following another a trade
+    {
+      d2[trade_i1,4] = 0 # \delta p = 0
+    }
+    trade_i1 = i2
+  }
+  else # Quote
+  {
+    if (i2-trade_i1 == 1) # Following a trade
+    {
+      d2[trade_i1,4] = d2[i2,3]-d2[quote_i1,3] # diff(logmids)
+    }
+    quote_i1 = i2
+  }
+}
