@@ -1,3 +1,6 @@
+# Single Curve Collapse of the Price Impact Function for the New York Stock Exchange
+# Fabrizio Lillo, J. Doyne Farmer and Rosario N. Mantegna
+# 2002
 
 require(xts)
 require(Hmisc)
