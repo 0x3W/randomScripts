@@ -2,6 +2,8 @@
 # Fabrizio Lillo, J. Doyne Farmer and Rosario N. Mantegna
 # 2002
 
+# adjusted few lines by me to accomodate new TAQ structure
+
 require(xts)
 require(Hmisc)
 
