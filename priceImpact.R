@@ -2,7 +2,7 @@
 # Fabrizio Lillo, J. Doyne Farmer and Rosario N. Mantegna
 # 2002
 
-# adjusted few lines by me to accomodate new TAQ structure
+# adjusted few lines to accomodate new TAQ structure and ggplot2 for plotting
 
 require(xts)
 require(Hmisc)
@@ -137,8 +137,22 @@ max_bins = 50
 sizes = as.double(levels(cut2(buy[,1],g=max_bins,levels.mean=TRUE)))
 buy[,1] = cut2(buy[,1],g=max_bins,levels.mean=TRUE)
 ge_imp = aggregate(buy[,2], list(buy[,1]), mean)
-plot(sizes,ge_imp[,2],log="xy",type="p",pch=15,ylab="price shift",
-     xlab="normalized volume",main="GE")
+
+imp <- ge_imp[,2]
+impDF <- data.frame(sizes,imp)
+colnames(impDF) <- c("Size","Imp")
+library(ggplot2)
+
+ggplot(data = impDF, aes(x=impDF$Size,y=impDF$Imp)) + geom_point() + 
+  scale_x_continuous(trans='log2') + 
+  scale_y_continuous(trans='log2') +
+  ggtitle("AAPL - 23rd May 2018 - Price Impact Function" ) + theme(plot.title = element_text(hjust = 0.5))
+
+
+#plot(sizes,ge_imp[,2],log="xy",type="p",pch=15,ylab="price shift",
+#     xlab="normalized volume",main="GE")
+
+
 
 # Find how the price impact increases with volume
 imp_fit = function(pow){summary(lm(ge_imp[,2] ~ I(sizes^pow)))$r.squared}
