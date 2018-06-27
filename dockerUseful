@@ -1,0 +1,8 @@
+docker image ls
+docker container ls
+
+#build container
+docker build -t vladtest2 .
+
+#run docker and bind directory to container
+docker run -it -v /home/vv920:/home/vv920 vladtest1
