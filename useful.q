@@ -10,7 +10,7 @@ q ws.q
 .z.ws:{show .j.k x}
 #.polo.upd:{show .j.k x}
 
-#Option Pricing in k - cdf not corrent
+#Option Pricing in k - cdf needs work
 pdf:{[x] (1.0%( exp 0.5 * log (2*3.141592653589793))) * (exp(-0.5*x*x))}  
 #pdf[1]
 #0.2419707
