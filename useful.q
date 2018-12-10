@@ -4,6 +4,8 @@ t: .j.k each read0`:/Users/Dovla/Desktop/Charts2.json
 
 #Poloniex websocket in kdb
 q ws.q
+.ws.VERBOSE:1b
+.ws.w
 .polo.upd:{.polo.x,:enlist x}
 .polo.h:.ws.open["wss://api2.poloniex.com";`.polo.upd]
 .polo.h .j.j `command`channel!`subscribe`BTC_ETH
