@@ -12,6 +12,13 @@ q ws.q
 .z.ws:{show .j.k x}
 #.polo.upd:{show .j.k x}
 
+#pool - not working
+msg:.j.j `id`method`channel!(1;"mining.subscribe";("params";"[]"))
+msg1: msg,"\n"
+msg2:4h$msg1
+hopen `:solo.ckpool.org:3333 msg2
+.Q.hg`:http://solo.ckpool.org
+
 #Option Pricing in k - cdf needs work
 pdf:{[x] (1.0%( exp 0.5 * log (2*3.141592653589793))) * (exp(-0.5*x*x))}  
 #pdf[1]
