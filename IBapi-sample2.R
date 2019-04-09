@@ -1,0 +1,5 @@
+library(IBrokers)
+IBConn <- twsConnect()
+contract = twsContract(0,"AAPL","STK","SMART","ISLAND", "","0.0","USD","","","",NULL,NULL,"0")
+data_AAPL = reqHistoricalData(IBConn, contract, whatToShow ='BID_ASK', useRTH = "0", barSize = '1 min', duration="1 D", endDateTime = paste0(gsub("-","", reqCurrentTime(IBConn))))
+head(data_AAPL)
