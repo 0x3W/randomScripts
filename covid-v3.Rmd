@@ -1,0 +1,122 @@
+---
+title: "Crna Gora COVID-19"
+author: "W"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social: menu
+    source_code: embed
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(plotly)
+library(plyr)
+library(flexdashboard)
+
+library(tidyr)
+
+mne <- read.csv("/Users/Dovla/Desktop/covidMNE2003.csv")
+
+# Make some noisily increasing data
+set.seed(955)
+dat <- data.frame(cond = rep(c("A", "B"), each=10),
+                  xvar = 1:20 + rnorm(20,sd=3),
+                  yvar = 1:20 + rnorm(20,sd=3))
+```
+
+Samoizolacija
+=======================================================================
+
+Podaci JIZCG
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### Samoizolacija
+
+```{r}
+articles <- 10
+valueBox(articles, icon = "fa-home", color = "success")
+```
+
+### COVID-19 slucajevi
+
+```{r}
+comments <- 10
+valueBox(comments, icon = "fa-notes-medical", color = "warning")
+```
+
+### Umrli
+
+```{r}
+spam <- 10
+valueBox(spam, 
+         icon = "fa-battery-empty",
+         color = "danger")
+```
+
+
+Row
+-----------------------------------------------------------------------
+
+### Evolucija COVID-19 slucajeva 
+
+```{r}
+myvars <- c("Day","Infected", "Tested")
+mne1 <- mne[myvars]
+mne2 <- mne1 %>%
+  pivot_longer(-Day, names_to = "series", values_to = "count")
+
+
+p1 <- ggplot(data=mne2, aes(x=Day, y=count, group=series)) + geom_line()
+ggplotly(p1)
+
+
+
+#p <- ggplot(dat, aes(x=xvar, y=yvar)) +
+#            geom_point(shape=1)      # Use hollow circles
+#ggplotly(p)
+```
+
+
+### Stopa rasta novih COVID-19 slucajeva
+
+```{r}
+p2 <- ggplot(data=mne, aes(x=Day, y=InfectedNew, group=1)) + geom_line()
+ggplotly(p2)
+
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Novi COVID-19 slucajevi
+
+```{r}
+p3 <- ggplot(data=mne, aes(x=Day, y=InfectedNew)) + geom_bar(stat="identity")
+ggplotly(p3)
+```
+
+### Evolucija od prvog COVID-19 slucaja
+
+```{r}
+n <- 20
+x1 <- rnorm(n); x2 <- rnorm(n)
+y1 <- 2 * x1 + rnorm(n)
+y2 <- 3 * x2 + (2 + rnorm(n))
+A <- as.factor(rep(c(1, 2), each = n))
+df <- data.frame(x = c(x1, x2), y = c(y1, y2), A = A)
+fm <- lm(y ~ x + A, data = df)
+
+p <- ggplot(data = cbind(df, pred = predict(fm)), aes(x = x, y = y, color = A))
+p <- p + geom_point() + geom_line(aes(y = pred))
+ggplotly(p)
+```
+
+SIRD model za predvidjanje
+=======================================================================
+
+Twitter analiza
+=======================================================================
