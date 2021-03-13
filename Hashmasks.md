@@ -24,8 +24,6 @@ Charles Dickens	- Oliver Twist - Chapter 39
 
 The links of images
 
-https://hashmasksstore.blob.core.windows.net/hashmasks/15.jpg
-
-https://hashmasksstore.blob.core.windows.net/hashmasks/32.jpg
-
-https://hashmasksstore.blob.core.windows.net/hashmasks/88.jpg
+* https://hashmasksstore.blob.core.windows.net/hashmasks/15.jpg
+* https://hashmasksstore.blob.core.windows.net/hashmasks/32.jpg
+* https://hashmasksstore.blob.core.windows.net/hashmasks/88.jpg
