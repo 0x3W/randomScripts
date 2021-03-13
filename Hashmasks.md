@@ -11,7 +11,6 @@ The book pages are from
 * Herman Melville - Moby Dick - Chapter 86
 * Miqel de Cervatnes - Don Quixote - Chapter 22
 * Leo Tolstoy - War and Peace - Chapter 24
-* Herman Melville - Moby Dick - Chapter 86
 * Charles Dickens	- Oliver Twist - Chapter 39
 
 The links of images
