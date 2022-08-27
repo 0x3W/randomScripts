@@ -3,7 +3,7 @@ library(dplyr) #data munging
 library(rkdb)
 
 
-mydb = dbConnect(MySQL(), user='necesvise', password='123Dubovica+', dbname='poloniex', host='34.216.81.75', port=3306)
+mydb = dbConnect(MySQL(), user='necesvise', password='', dbname='poloniex', host='34.216.81.75', port=3306)
 bookProd1 <- fetch(dbSendQuery(mydb, "select * from BTCETH2412OB"), n=-1)
 min(bookProd1$seq)
 max(bookProd1$seq)
