@@ -8,6 +8,7 @@ Created on Sun Nov 27 22:20:15 2022
 
 import googleapiclient.discovery
 import pandas as pd
+import seaborn as sns
 
 api_service_name = "youtube"
 api_version = "v3"
@@ -58,7 +59,6 @@ import matplotlib.pyplot as plt
 fig, ax = plt.subplots()
 df1['DateDeltaInHoursRound3'].value_counts().plot(ax=ax, kind='bar')
 
-import seaborn as sns
 sns.set(rc={"figure.dpi":600, 'savefig.dpi':600})
 sns.set_context('notebook')
 sns.set_style("darkgrid")
