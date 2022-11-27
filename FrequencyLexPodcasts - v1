@@ -61,9 +61,6 @@ df1['DateDeltaInHoursRound3'].value_counts().plot(ax=ax, kind='bar')
 import seaborn as sns
 sns.set(rc={"figure.dpi":600, 'savefig.dpi':600})
 sns.set_context('notebook')
-#sns.set_style("dark")
-#sns.set_style("ticks")
-#sns.set_style("whitegrid")
 sns.set_style("darkgrid")
 ax = sns.countplot(x="DateDeltaInHoursRound3",data=df1,palette=("crest")).set(title='Frequency of Lex podcasts', xlabel='Number of days')
 
