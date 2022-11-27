@@ -38,17 +38,8 @@ for i in x:
         
     for ii in range(0,5):
         l.append([response['items'][ii]['snippet']['publishedAt'],response['items'][ii]['snippet']['title']])
-#        print(i," ",ii)
 
-l
 df = pd.DataFrame(l, columns =['Date', 'Name'])
-df
-df.to_csv("/Users/vladovukovic/Desktop/LexTest3.csv")
-
-import pickle
-df.to_pickle("/Users/vladovukovic/Desktop/LexPik2")
-
-
 df1 = df.copy()
 
 
@@ -61,10 +52,6 @@ for i in range(0,335):
 df1['DateDeltaInHoursRound']=df1['DateDeltaInHours'].round()
 df1['DateDeltaInHoursRound2'] = df1['DateDeltaInHoursRound'].astype(str).apply(lambda x: x.replace('.0',''))
 df1['DateDeltaInHoursRound3'] = df1['DateDeltaInHoursRound2'].astype(int)
-
-df1.to_csv("/Users/vladovukovic/Desktop/LexFull.csv")
-df1.to_pickle("/Users/vladovukovic/Desktop/LexFullPik")
-df1.to_pickle("/Users/vladovukovic/Desktop/LexFullPik2.pkl")
 
 import matplotlib.pyplot as plt
 
