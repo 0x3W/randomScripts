@@ -54,16 +54,13 @@ df1['DateDeltaInHoursRound']=df1['DateDeltaInHours'].round()
 df1['DateDeltaInHoursRound2'] = df1['DateDeltaInHoursRound'].astype(str).apply(lambda x: x.replace('.0',''))
 df1['DateDeltaInHoursRound3'] = df1['DateDeltaInHoursRound2'].astype(int)
 
-import matplotlib.pyplot as plt
-
-fig, ax = plt.subplots()
-df1['DateDeltaInHoursRound3'].value_counts().plot(ax=ax, kind='bar')
+df1['DateDeltaInHoursRound4'] = df1['DateDeltaInHoursRound3']
+df1['DateDeltaInHoursRound4'].values[df1['DateDeltaInHoursRound4'].values > 9] = 10
 
 sns.set(rc={"figure.dpi":600, 'savefig.dpi':600})
 sns.set_context('notebook')
 sns.set_style("darkgrid")
 ax = sns.countplot(x="DateDeltaInHoursRound4",data=df1,
-                   palette=("crest")).set(title='Frequency of Lex podcasts', 
+                   palette=("crest")).set(title='Frequency of Lex podcasts as of #341', 
                    xlabel='Number of days between podcasts', 
-                   xticklabels=['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15+'])
-
+                   xticklabels=['0','1','2','3','4','5','6','7','8','9','10+'])
