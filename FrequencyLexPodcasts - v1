@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Nov 27 22:20:15 2022
+
+@author: vladovukovic
+"""
+
+import googleapiclient.discovery
+import pandas as pd
+
+api_service_name = "youtube"
+api_version = "v3"
+DEVELOPER_KEY = "Y"
+
+youtube = googleapiclient.discovery.build(api_service_name, api_version, developerKey = DEVELOPER_KEY)
+
+x = range(0, 337, 5)
+
+tok = ''
+l =[]
+
+for i in x:
+    print(i)
+    if i < 5:
+        request = youtube.playlistItems().list(part="id,snippet", playlistId="PLrAXtmErZgOdP_8GztsuKi9nrraNbKKp4")
+        response = request.execute()
+        tok = response['nextPageToken']
+
+    elif i == 335:
+        request = youtube.playlistItems().list(part="id,snippet", playlistId="PLrAXtmErZgOdP_8GztsuKi9nrraNbKKp4", pageToken = tok)
+        response = request.execute()
+
+    else:
+        request = youtube.playlistItems().list(part="id,snippet", playlistId="PLrAXtmErZgOdP_8GztsuKi9nrraNbKKp4", pageToken = tok)
+        response = request.execute()
+        tok = response['nextPageToken']
+        
+    for ii in range(0,5):
+        l.append([response['items'][ii]['snippet']['publishedAt'],response['items'][ii]['snippet']['title']])
+#        print(i," ",ii)
+
+l
+df = pd.DataFrame(l, columns =['Date', 'Name'])
+df
+df.to_csv("/Users/vladovukovic/Desktop/LexTest3.csv")
+
+import pickle
+df.to_pickle("/Users/vladovukovic/Desktop/LexPik2")
+
+
+df1 = df.copy()
+
+
+df1['Date2'] =  pd.to_datetime(df1['Date'], format='%Y%m%d %H:%M:%S.%f')
+df1['DateDeltaInHours'] = 0
+
+for i in range(0,335):
+    df1['DateDeltaInHours'][i] = ((df1['Date2'][i] - df1['Date2'][i+1]) / pd.Timedelta('1 hour'))/24
+
+df1['DateDeltaInHoursRound']=df1['DateDeltaInHours'].round()
+df1['DateDeltaInHoursRound2'] = df1['DateDeltaInHoursRound'].astype(str).apply(lambda x: x.replace('.0',''))
+df1['DateDeltaInHoursRound3'] = df1['DateDeltaInHoursRound2'].astype(int)
+
+df1.to_csv("/Users/vladovukovic/Desktop/LexFull.csv")
+df1.to_pickle("/Users/vladovukovic/Desktop/LexFullPik")
+df1.to_pickle("/Users/vladovukovic/Desktop/LexFullPik2.pkl")
+
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+df1['DateDeltaInHoursRound3'].value_counts().plot(ax=ax, kind='bar')
+
+import seaborn as sns
+sns.set(rc={"figure.dpi":600, 'savefig.dpi':600})
+sns.set_context('notebook')
+#sns.set_style("dark")
+#sns.set_style("ticks")
+#sns.set_style("whitegrid")
+sns.set_style("darkgrid")
+ax = sns.countplot(x="DateDeltaInHoursRound3",data=df1,palette=("crest")).set(title='Frequency of Lex podcasts', xlabel='Number of days')
+
