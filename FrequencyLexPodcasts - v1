@@ -43,7 +43,6 @@ for i in x:
 df = pd.DataFrame(l, columns =['Date', 'Name'])
 df1 = df.copy()
 
-
 df1['Date2'] =  pd.to_datetime(df1['Date'], format='%Y%m%d %H:%M:%S.%f')
 df1['DateDeltaInHours'] = 0
 
@@ -57,7 +56,7 @@ df1['DateDeltaInHoursRound3'] = df1['DateDeltaInHoursRound2'].astype(int)
 df1['DateDeltaInHoursRound4'] = df1['DateDeltaInHoursRound3']
 df1['DateDeltaInHoursRound4'].values[df1['DateDeltaInHoursRound4'].values > 9] = 10
 
-sns.set(rc={"figure.dpi":600, 'savefig.dpi':600})
+sns.set(rc={"figure.dpi":1200, 'savefig.dpi':1200})
 sns.set_context('notebook')
 sns.set_style("darkgrid")
 ax = sns.countplot(x="DateDeltaInHoursRound4",data=df1,
